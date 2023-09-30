@@ -1,0 +1,13 @@
+.hi {
+  width: 50%;
+  margin-left: 770px;
+  margin-top: 280px;
+  background: white;
+  padding: 30px;
+  border: 2px #9999;
+  border-radius: 5px;
+}
+.new {
+  margin-top: 30px;
+  margin-left: 180px;
+}

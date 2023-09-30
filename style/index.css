@@ -1,0 +1,11 @@
+body {
+  display: block;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.index-link {
+  display: flex;
+  justify-content: space-around;
+}

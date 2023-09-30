@@ -1,0 +1,16 @@
+body{
+    display: flex;
+    justify-content: center ;
+    align-items: center;
+    text-align: center;
+
+}
+
+.input-field{
+    display: flex;
+    justify-content:  space-around;
+}
+
+div{
+    margin: 20px;
+}
