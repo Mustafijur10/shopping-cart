@@ -1,86 +1,35 @@
-<?php
-
-include 'db.php';
-
-    if(isset($_POST['login-btn'])){
-        $username = $_POST["uname"];
-        $password = md5($_POST["upassword"]);
-
-        $sql = "select * from users where user_name ='".$username."' AND passwords='".$password."'";
-
-        $result = mysqli_query($connection, $sql);
-        //$row2 = mysqli_fetch_array($result);
-        $row = mysqli_num_rows($result);
-
-       
-        $fetch = mysqli_fetch_array($result);
-
-        if($row==1 && $fetch["user_type"]==='1'){
-            $name = $fetch['user_name'];
-            session_start();
-
-            $_SESSION['usersname'] = $name;
-            header("location:admin/adminPage.php");
-        }
-        elseif($row==1 && $fetch["user_type"]==='0')
-        {
-             header("location:userPage.php");
-        }
-        else{
-            header("location:login.php");
-        }
-    }
-?>
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <style>
-        body{
-            
-            width: 50%;
-            background: #9999;
-            
-            
-            
-        }
-        .hi{
-            width: 50%;
-            margin-left: 770px;
-            margin-top: 280px;
-            background: white;
-            padding: 30px;
-            border: 2px #9999;
-            border-radius: 5px;
+<html>
 
-            
-            
-        }
-        .new{
-            margin-top: 30px;
-            margin-left: 180px;
-            box-shadow: 
-        }
-        
-    </style>
+<head>
+    <title>
+        Select and upload multiple
+        files to the server
+    </title>
 </head>
+
 <body>
-<form class="hi shadow-lg" method="POST" >
-  <div class="form-group">
-    <label for="uname">User Name</label>
-    <input type="text" class="form-control" name="uname" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter username">
-    
-  </div>
-  <div class="form-group">
-    <label for="upassword">Password</label>
-    <input type="password" name="upassword" class="form-control" id="exampleInputPassword1" placeholder="Password">
-  </div>
-  
-  <button type="submit" name="login-btn" class="btn btn-primary new">Submit</button>
-  
-</form>
+
+    <!-- multipart/form-data ensures that form
+    data is going to be encoded as MIME data -->
+    <form action="file_upload.php" method="POST" enctype="multipart/form-data">
+
+        <h2>Upload Files</h2>
+
+
+        <p>
+            Select files to upload:
+
+            <!-- name of the input fields are going to
+                be used in our php script-->
+            <input type="file" name="files[]" multiple>
+
+            <br><br>
+
+            <input type="submit" name="submit" value="Upload">
+        </p>
+
+    </form>
 </body>
+
 </html>

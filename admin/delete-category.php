@@ -44,4 +44,26 @@ if (isset($_GET['inactiveid'])) {
 
 }
 
+
+if (isset($_GET['iuserid'])) {
+    $id = $_GET['iuserid'];
+    $sql = "UPDATE users set status=0 where id = $id";
+    $result = mysqli_query($connection, $sql);
+
+    if ($result) {
+        header("location:user-request.php");
+    }
+
+}
+
+if (isset($_GET['userid'])) {
+    $id = $_GET['userid'];
+    $sql = "UPDATE users set status=1 where id = $id";
+    $result = mysqli_query($connection, $sql);
+
+    if ($result) {
+        header("location:user-request.php");
+    }
+
+}
 ?>

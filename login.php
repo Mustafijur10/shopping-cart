@@ -1,33 +1,44 @@
 <?php
 
 include 'db.php';
-//include 'session.php';
+if (!isset($_SESSION)) {
+  session_start();
+}
+if (isset($_SESSION['usersname'])) {
+  header('location:userPage.php');
+}
 
-if (isset($_POST['login-btn'])) {
-  $username = $_POST["uname"];
-  $password = md5($_POST["upassword"]);
+if (isset($_POST["username"]) && isset($_POST["password"])) {
+  $username = $_POST["username"];
+  $password = md5($_POST["password"]);
 
   $sql = "select * from users where user_name ='" . $username . "' AND passwords='" . $password . "'";
-
   $result = mysqli_query($connection, $sql);
-  //$row2 = mysqli_fetch_array($result);
   $row = mysqli_num_rows($result);
-
 
   $fetch = mysqli_fetch_array($result);
 
   if ($row == 1 && $fetch["user_type"] === '1') {
     $name = $fetch['user_name'];
     session_start();
-
     $_SESSION['usersname'] = $name;
+    echo "seccess";
     header("location:admin/adminPage.php");
-  } elseif ($row == 1 && $fetch["user_type"] === '0') {
+
+  } elseif ($row == 1 && $fetch["user_type"] === '0' && $fetch["status"] === '1') {
+    $name = $fetch['user_name'];
+    session_start();
+    $_SESSION['usersname'] = $name;
+    $_SESSION['status'] = $fetch['status'];
+    echo "seccess";
     header("location:userPage.php");
+
   } else {
     header("location:login.php");
   }
 }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,25 +55,38 @@ if (isset($_POST['login-btn'])) {
       width: 50%;
       background: #9999;
     }
+
+    .error {
+      color: red;
+      font-style: italic;
+    }
   </style>
 </head>
 
 <body>
-  <form class="hi shadow-lg" method="POST">
+  <form class="hi shadow-lg" id="login" method="POST">
     <div class="form-group">
-      <label for="uname">User Name</label>
-      <input type="text" class="form-control" name="uname" id="exampleInputEmail1" aria-describedby="emailHelp"
+      <label for="username">User Name</label>
+      <input type="text" class="form-control" name="username" id="username" aria-describedby="emailHelp"
         placeholder="Enter username">
+      <p class="nameErr"></p>
 
     </div>
     <div class="form-group">
-      <label for="upassword">Password</label>
-      <input type="password" name="upassword" class="form-control" id="exampleInputPassword1" placeholder="Password">
+      <label for="password">Password</label>
+      <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+      <span id="login_message"></span>
     </div>
 
-    <button type="submit" name="login-btn" class="btn btn-primary new">Submit</button>
+    <button type="submit" id="login_btn" name="login-btn" class="btn btn-primary new">Submit</button>
 
   </form>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="user/login.js"></script>
 </body>
 
 </html>

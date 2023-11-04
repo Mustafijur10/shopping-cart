@@ -1,11 +1,32 @@
-body {
+ul {
+  list-style: none;
+}
+ul li {
+  display: inline-block;
+  position: relative;
+}
+ul li a {
   display: block;
-  justify-content: center;
-  align-items: center;
+  padding: 20px 25px;
+
+  text-decoration: none;
   text-align: center;
+  font-size: 20px;
+}
+ul li ul.dropdown li {
+  display: block;
+}
+ul li ul.dropdown {
+  width: 100%;
+  position: absolute;
+  background: #faeee6;
+  z-index: 999;
+  display: none;
 }
 
-.index-link {
-  display: flex;
-  justify-content: space-around;
+ul li a:hover {
+  background: #faeee6;
+}
+ul li:hover ul.dropdown {
+  display: block;
 }
