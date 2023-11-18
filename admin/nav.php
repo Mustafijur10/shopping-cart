@@ -59,6 +59,15 @@
                     <a href="order-list.php" class="text-decoration-none"><span class="text-light">Order
                             Requests</span></a>
                 </p>
+                <hr class="bg-light ">
+                <p class="pt-2 pb-2 text-center">
+                    <a href="gallery.php" class="text-decoration-none"><span class="text-light">Image
+                            Gallery</span></a>
+                </p>
+                <hr class="bg-light ">
+                <p class="pt-2 pb-2 text-center">
+                    <a href="page-edit.php" class="text-decoration-none"><span class="text-light">Pages</span></a>
+                </p>
 
 
 

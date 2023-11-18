@@ -44,12 +44,24 @@ if (isset($_SESSION['cart'])) {
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="style/index.css">
 
+    <!-- lightGallery plugins  -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-autoplay.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-thumbnail.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-fullscreen.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-rotate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-share.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-zoom.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-comments.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-pager.min.css">
+
 </head>
 
 
 <body>
     <!-- header section start -->
-    <div class="header_section">
+    <div class="header_section mb-5">
         <div class="container-fluid">
             <nav class="navbar navbar-light bg-light justify-content-between">
                 <div id="mySidenav" class="sidenav">
@@ -68,23 +80,82 @@ if (isset($_SESSION['cart'])) {
                     <div class="login_text">
                         <ul>
                             <li>
-                                <?php
-                                echo '<a href="my-orders.php" style="color: #535453; ">My Orders</a>';
-                                ?>
+                                <ul class="custom-ul">
 
-                            </li>
-                            <li>
-                                <?php
-                                echo '<a href="user/logout.php" style="color: #535453; ">Logout</a>';
-                                ?>
+                                    <li class="custom-li "><a href="#" class="text-dark">Categories</a>
+                                        <ul name="category-name" class="dropdown" required>
 
+                                            <?php
+                                            $info = "SELECT * FROM categories";
+                                            $results = mysqli_query($connection, $info);
+                                            if ($results) {
+                                                while ($row = mysqli_fetch_assoc($results)) {
+                                                    $columnName = $row['name'];
+                                                    $columnId = $row['id'];
+                                                    $columnStatus = $row['status'];
+
+                                                    if ($columnStatus == 1) {
+                                                        ?>
+                                                        <li>
+                                                            <a href="products-in-category.php?ids=<?= $columnId ?>"
+                                                                class="text-dark">
+                                                                <?= $columnName ?>
+                                                            </a>
+                                                        </li>
+                                                        <?php
+                                                    }
+                                                }
+                                            }
+                                            ?>
+                                            <ul>
+                                    </li>
+                                </ul>
                             </li>
-                            <li><a href="my-cart.php"><img src="images/bag-icon.png"><span
-                                        class="position-absolute start-100 translate-middle badge badge-secondary rounded-circle">
-                                        <?= $count; ?>
-                                    </span></a></li>
-                            <li><a href="#"><img src="images/search-icon.png"></a></li>
+
+
                         </ul>
+                        <li>
+                            <?php
+                            $info = "SELECT * FROM pages";
+                            $results = mysqli_query($connection, $info);
+                            if ($results) {
+                                while ($row = mysqli_fetch_assoc($results)) {
+                                    $columnName = $row['name'];
+                                    $columnId = $row['id'];
+
+
+                                    if ($results) {
+                                        ?>
+                                    <li>
+                                        <a href="slide-show.php?ids=<?= $columnId ?>" class="text-dark">
+                                            <?= $columnName ?>
+                                        </a>
+                                    </li>
+                                    <?php
+                                    }
+                                }
+                            }
+                            ?>
+                        </li>
+
+                        <li>
+                            <?php
+                            echo '<a href="my-orders.php" style="color: #535453; ">My Orders</a>';
+                            ?>
+
+                        </li>
+                        <li>
+                            <?php
+                            echo '<a href="user/logout.php" style="color: #535453; ">Logout</a>';
+                            ?>
+
+                        </li>
+                        <li><a href="my-cart.php"><img src="images/bag-icon.png"><span
+                                    class="position-absolute start-100 translate-middle badge badge-secondary rounded-circle">
+                                    <?= $count; ?>
+                                </span></a></li>
+                        <li><a href="#"><img src="images/search-icon.png"></a></li>
+
                     </div>
                 </form>
             </nav>

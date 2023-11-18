@@ -35,15 +35,15 @@ $select_image_run = mysqli_query($connection, $select_image);
 
             <div class="row d-flex justify-content-center shadow-lg p-3 mb-5 bg-white rounded">
                 <?php while ($row = mysqli_fetch_assoc($sql2)) { ?>
-                    <div class="col-lg-5 col-sm-6 d-flex flex-column align-items-center justify-content-center">
+                    <div class="col-lg-7 col-sm-6 d-flex flex-column align-items-center justify-content-center">
                         <div>
-                            <img id="imageChange" style="width:400px; height:500px" src="images/<?= $row['image']; ?>">
+                            <img id="imageChange" style="width:100%; height:500px" src="images/<?= $row['image']; ?>">
                         </div>
                         <div class="mt-5 d-flex justify-content-between container ">
                             <?php
                             while ($rows = mysqli_fetch_assoc($select_image_run)) { ?>
                                 <button>
-                                    <img onclick="changeImage('images/<?= $rows['images']; ?>')"
+                                    <img onclick="changeImage('images/<?= $rows['images']; ?>', '<?= $rows['images']; ?>')"
                                         style="width: 80px; height: 110px;" src="images/<?= $rows['images']; ?>">
                                 </button>
 
@@ -51,7 +51,7 @@ $select_image_run = mysqli_query($connection, $select_image);
                         </div>
 
                     </div>
-                    <div class="col-lg-7 col-sm-6 ">
+                    <div class="col-lg-5 col-sm-6 ">
                         <form action="my-cart.php" method="POST">
                             <p class="">Name:
                                 <input type="hidden" name="product_name" value="<?= $row['name']; ?>" id="">
@@ -61,6 +61,14 @@ $select_image_run = mysqli_query($connection, $select_image);
                             </p>
                             <p class="">Description:
                                 <?= $row['description']; ?>
+                            </p>
+
+                            <p class="" id="NameChange">shortcode:
+                                <?php $rep_name = $row['image'];
+                                $rep_name = str_replace(".jpg", "", $rep_name);
+                                echo $rep_name; ?>
+
+
                             </p>
                             <p class="">Brand:
                                 <?= $row['brand']; ?>
@@ -106,8 +114,6 @@ $select_image_run = mysqli_query($connection, $select_image);
                             </div>
                         </form>
 
-
-
                     </div>
                     <?php
                     if (isset($_SESSION['usersname'])) {
@@ -149,8 +155,6 @@ $select_image_run = mysqli_query($connection, $select_image);
                                 </div>
                             </form>
                         </div>
-
-
                         <?php
                     }
                     ?>
@@ -160,13 +164,13 @@ $select_image_run = mysqli_query($connection, $select_image);
     </div>
 </div>
 
-
-
 <script>
-    function changeImage(filename) {
+    function changeImage(filename, name) {
         let img = document.querySelector("#imageChange");
         img.setAttribute("src", filename);
 
+        name = name.replace(".jpg", "");
+        document.querySelector("#NameChange").innerText = 'shortcode: ' + name;
     }
 </script>
 </body>

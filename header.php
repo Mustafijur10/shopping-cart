@@ -69,26 +69,81 @@ if (isset($_SESSION['cart'])) {
                     <div class="login_text">
 
                         <ul>
-                            <li><a href="login.php"><img src="images/user-icon.png"></a></li>
                             <li>
-                                <a href="registration.php" style="color: #535453; ">Registration</a>
-                            </li>
-                            <!-- <li> -->
-                            <!-- php -->
-                            <!-- echo '<a href="index.php" style="color: #535453; ">Logout</a>'; -->
-                            <!-- ?> -->
+                                <ul class="custom-ul">
 
-                            <!-- </li> -->
-                            <li>
-                                <a href="my-cart.php"><img src="images/bag-icon.png"><span
-                                        class="position-absolute start-100 translate-middle badge badge-secondary rounded-circle">
-                                        <?= $count; ?>
-                                    </span></a>
+                                    <li class="custom-li "><a href="#" class="text-dark">Categories</a>
+                                        <ul name="category-name" class="dropdown" required>
+
+                                            <?php
+                                            $info = "SELECT * FROM categories";
+                                            $results = mysqli_query($connection, $info);
+                                            if ($results) {
+                                                while ($row = mysqli_fetch_assoc($results)) {
+                                                    $columnName = $row['name'];
+                                                    $columnId = $row['id'];
+                                                    $columnStatus = $row['status'];
+
+                                                    if ($columnStatus == 1) {
+                                                        ?>
+                                                        <li>
+                                                            <a href="products-in-category.php?ids=<?= $columnId ?>"
+                                                                class="text-dark">
+                                                                <?= $columnName ?>
+                                                            </a>
+                                                        </li>
+                                                        <?php
+                                                    }
+                                                }
+                                            }
+                                            ?>
+                                            <ul>
+                                    </li>
+                                </ul>
                             </li>
-                            <li><a href="#"><img src="images/search-icon.png"></a></li>
+
                         </ul>
+                        <li>
+                            <?php
+                            $info = "SELECT * FROM pages";
+                            $results = mysqli_query($connection, $info);
+                            if ($results) {
+                                while ($row = mysqli_fetch_assoc($results)) {
+                                    $columnName = $row['name'];
+                                    $columnId = $row['id'];
+
+
+                                    if ($results) {
+                                        ?>
+                                    <li>
+                                        <a href="slide-show.php?ids=<?= $columnId ?>" class="text-dark">
+                                            <?= $columnName ?>
+                                        </a>
+                                    </li>
+                                    <?php
+                                    }
+                                }
+                            }
+                            ?>
+                        </li>
+                        <li><a href="login.php"><img src="images/user-icon.png"></a></li>
+
+                        <li>
+                            <a href="registration.php" style="color: #535453; ">Registration</a>
+                        </li>
+
+                        <li>
+                            <a href="my-cart.php"><img src="images/bag-icon.png"><span
+                                    class="position-absolute start-100 translate-middle badge badge-secondary rounded-circle">
+                                    <?= $count; ?>
+                                </span></a>
+                        </li>
+                        <li><a href="#"><img src="images/search-icon.png"></a></li>
                     </div>
                 </form>
             </nav>
+
+
+
         </div>
     </div>

@@ -18,7 +18,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
   $fetch = mysqli_fetch_array($result);
 
-  if ($row == 1 && $fetch["user_type"] === '1') {
+  if ($row == 1 && $fetch["user_type"] === '1' && $fetch["status"] === '1') {
     $name = $fetch['user_name'];
     session_start();
     $_SESSION['usersname'] = $name;

@@ -83,35 +83,7 @@ $latest_product_run = mysqli_query($connection, $latest_product);
             <div class="col-sm-12">
                 <h1 class="product_taital">Our Products</h1>
                 <p class="product_text font-weight-bold">
-                <ul>
-
-                    <li><a href="#">Select Category</a>
-                        <ul name="category-name" class="dropdown" required>
-
-                            <?php
-                            $info = "SELECT * FROM categories";
-                            $results = mysqli_query($connection, $info);
-                            if ($results) {
-                                while ($row = mysqli_fetch_assoc($results)) {
-                                    $columnName = $row['name'];
-                                    $columnId = $row['id'];
-                                    $columnStatus = $row['status'];
-
-                                    if ($columnStatus == 1) {
-                                        ?>
-                                        <li>
-                                            <a href="products-in-category.php?ids=<?= $columnId ?>">
-                                                <?= $columnName ?>
-                                            </a>
-                                        </li>
-                                        <?php
-                                    }
-                                }
-                            }
-                            ?>
-                            <ul>
-                    </li>
-                </ul>
+                    <!-- category here  -->
                 </p>
             </div>
         </div>
@@ -409,6 +381,19 @@ $latest_product_run = mysqli_query($connection, $latest_product);
     </div>
 </div>
 <!-- copyright section end -->
+
+<!-- Create json file starts  -->
+<?php
+$get_products = "SELECT * from products";
+$products_results = mysqli_query($connection, $get_products);
+while ($product = mysqli_fetch_assoc($products_results)) {
+    $products_list[] = $product;
+}
+
+$encoded_data = json_encode($products_list, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+file_put_contents('data.json', $encoded_data);
+?>
+<!-- Create json file ends  -->
 <!-- Javascript files-->
 <script src="js/jquery.min.js"></script>
 <script src="js/popper.min.js"></script>

@@ -11,6 +11,16 @@ if (isset($_GET['deleteid'])) {
         header("location:category-details.php");
     }
 }
+if (isset($_GET['deletepageid'])) {
+    $id = $_GET['deletepageid'];
+
+    $sql = "DELETE FROM pages where id = $id";
+    $result = mysqli_query($connection, $sql);
+
+    if ($result) {
+        header("location:page-edit.php");
+    }
+}
 
 if (isset($_GET['activeid'])) {
 

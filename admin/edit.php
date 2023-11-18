@@ -2,8 +2,8 @@
 include '../session.php';
 include '../db.php';
 
-$m_id = $_GET['editid'];
 if (isset($_POST['Add-product'])) {
+    $m_id = $_GET['editid'];
     if (isset($_GET['editid'])) {
 
         $edit_id = $_GET['editid'];
@@ -49,8 +49,6 @@ if (isset($_POST['Add-product'])) {
 
             $query3 = "INSERT INTO product_images (product_id, images) VALUES ('$edit_id','$images') ";
             $result3 = mysqli_query($connection, $query3);
-
-
         }
         $selects = "SELECT images from product_images where product_id = '$edit_id' group by images limit 1";
         $query_run = mysqli_query($connection, $selects);
@@ -65,6 +63,42 @@ if (isset($_POST['Add-product'])) {
             header("location:adminPage.php");
         } else {
             header("location:add-products.php");
+        }
+    }
+}
+
+if (isset($_POST['Add-gallery'])) {
+    $m_id = $_GET['editgalleryid'];
+    if (isset($_GET['editgalleryid'])) {
+
+        $edit_id = $_GET['editgalleryid'];
+        $id = mysqli_real_escape_string($connection, $_POST['gallery_id']);
+        $name = mysqli_real_escape_string($connection, $_POST['name']);
+
+        include 'delete.php';
+
+        $query = "UPDATE gallery set title='$name' WHERE id='$id'";
+        $result = mysqli_query($connection, $query);
+
+        foreach ($_FILES['image']['name'] as $key => $value) {
+            if ($value == null) {
+                header("location:gallery.php");
+            } else {
+                $rand = rand(111, 999);
+                $images = $value;
+
+                move_uploaded_file($_FILES['image']['tmp_name'][$key], '../images/' . $images);
+
+                $query3 = "INSERT INTO gallery_images (gallery_id, images) VALUES ('$edit_id','$images') ";
+                $result3 = mysqli_query($connection, $query3);
+            }
+        }
+
+        if ($result5) {
+            $_SESSION['message'] = "Successfuly";
+            header("location:gallery.php");
+        } else {
+            header("location:gallery.php");
         }
     }
 }
@@ -105,7 +139,7 @@ if (isset($_GET['last_status'])) {
 }
 
 if (isset($_GET['editid'])) {
-
+    $m_id = $_GET['editid'];
     $product_id = mysqli_real_escape_string($connection, $_GET['editid']);
     $sql = "SELECT * FROM products where id = '$product_id'";
     $sql_run = mysqli_query($connection, $sql);
@@ -181,7 +215,7 @@ if (isset($_GET['editid'])) {
 
                         <div class="container-fluid d-flex justify-content-center" style="position: relative;">
                             <a href="update-image.php?editid='<?= $rows['id']; ?>'" class="text-decoration-none" style="background-color: transparent;
-                             border:0; font-size:40px; curson:pointer; position: absolute;
+                             border:0; font-size:40px; cursor:pointer; position: absolute;
                              top:-27px; right:2px; color: red">&times;</a>
                             <img style="width: 140px; height: 180px; " src="../images/<?= $rows['images']; ?>">
                         </div>
@@ -215,8 +249,102 @@ if (isset($_GET['editid'])) {
         echo "<h3>Product not found</h3>";
     }
 }
+
+// EDIT GALLERY
+
+if (isset($_GET['editgalleryid'])) {
+    $m_id = $_GET['editgalleryid'];
+
+    $sql = "SELECT * FROM gallery where id = '$m_id'";
+    $sql_run = mysqli_query($connection, $sql);
+    if (mysqli_num_rows($sql_run) > 0) {
+        $gallery_info = mysqli_fetch_array($sql_run);
+        include 'nav.php';
+        ?>
+        <form action="#" method="POST" class="w-50" enctype="multipart/form-data">
+
+            <h1 class="row d-flex justify-content-center">Edit Gallery</h1>
+
+            <div class="category-content">
+
+                <div>
+                    <input type="hidden" name="gallery_id" id="" value="<?= $gallery_info['id']; ?>" required>
+                </div>
+                <div class="gallery-fields">
+                    <div id="gallery-title">
+                        <label for='cname'>Gallery Title</label>
+                        <input type="text" class="form-control" name="name" id="" value="<?= $gallery_info['title']; ?>"
+                            required>
+                    </div>
+                    <div class="image-fields">
+                        <div id="select-image " class="select-image">
+                            <label for="image">Select Image</label>
+                            <input type="file" class="form-control" accept=".jpg, .jpeg, .png" name="image[]">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="d-flex mt-2 justify-content-center">
+                    <?php
+                    $select_image_name = "SELECT images from gallery_images where gallery_id='$m_id'";
+                    $select_image_name_run = mysqli_query($connection, $select_image_name);
+                    $image_column = mysqli_fetch_assoc($select_image_name_run);
+                    $image_name = $image_column['images'];
+
+                    $query_1 = "SELECT id, images from gallery_images where gallery_id ='$m_id' ";
+                    $query_1_run = mysqli_query($connection, $query_1);
+
+                    while ($rows = mysqli_fetch_assoc($query_1_run)) { ?>
+
+                        <div class="container-fluid d-flex justify-content-center" style="position: relative;">
+                            <a href="update-image.php?editgalleryid='<?= $rows['id']; ?>'" class="text-decoration-none" style="background-color: transparent;
+                             border:0; font-size:40px; cursor:pointer; position: absolute;
+                             top:-27px; right:2px; color: red">&times;</a>
+                            <a href=""><img style="width: 140px; height: 180px; " src="../images/<?= $rows['images']; ?>"></a>
+                        </div>
+                    <?php } ?>
+                </div>
+
+                <div class="add-category-btn w-50 gap-5 container-fluid d-flex">
+                    <button id="clickonbtn" class="form-control btn-info mt-5 text-light">Add More</button>
+                    <button id="deletebtn" class="form-control btn-danger mt-5 text-light">Remove</button>
+                </div>
+                <div class="add-category-btn">
+                    <input type="submit" value="Update Gallery" class="form-control btn-success mt-5" name="Add-gallery">
+                </div>
+            </div>
+        </form>
+
+        </div>
+        </div>
+        </div>
+        <?php
+    } else {
+        echo "<h3>Gallery not found</h3>";
+    }
+}
 ?>
 </div>
+<script>
+    document.querySelector('form').addEventListener('click', function (event) {
+        if (event.target && event.target.id === 'clickonbtn') {
+
+            const galleryFields = document.querySelector('.image-fields');
+            const newImageInput = document.createElement("div");
+            newImageInput.innerHTML = "<label for='image'>Select Image</label><input type='file' class='form-control' accept='.jpg, .jpeg, .png' name='image[]' required>";
+
+            galleryFields.appendChild(newImageInput);
+        }
+        else if (event.target && event.target.id === 'deletebtn') {
+
+            const galleryFields = document.querySelector('.image-fields');
+            const galleryInputs = galleryFields.querySelectorAll('div');
+
+            galleryFields.removeChild(galleryInputs[galleryInputs.length - 1]);
+        }
+    });
+</script>
 </body>
 
 </html>
